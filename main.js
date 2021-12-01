@@ -54,8 +54,31 @@ function process_repo_links(html, topicDirectory) {
             if (err) {
                 console.log(err);
             } else {
-                // to do
+                process_repo_page(html, topicDirectory);
             }
         });
+    }
+}
+
+function process_repo_page(html, topicDirectory) {
+    let $ = cheerio.load(html);
+    let issuePageLink = $('#issues-tab').attr('href');
+    let fullIssuePageLink = 'https://github.com' + issuePageLink;
+    request(fullIssuePageLink, function (err, response, html) {
+        if (err) {
+            console.log(err);
+        } else {
+            extract_issue_links(html, topicDirectory);
+        }
+    });
+}
+
+function extract_issue_links(html, topicDirectory) {
+    let $ = cheerio.load(html);
+    let issueAnchors = $('div[aria-label="Issues"] a.Link--primary');
+    let issueLinksArr = [];
+    for (let i = 0; i < issueAnchors.length; i++) {
+        let issueLink = $(issueAnchors[i]).attr('href');
+        issueLinksArr.push(issueLink);
     }
 }
