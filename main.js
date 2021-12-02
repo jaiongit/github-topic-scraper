@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const url = 'https://github.com/topics';
+const homeURL = 'https://github.com';
 
 request(url, function (err, response, html) {
     if (err) {
@@ -29,7 +30,7 @@ function process_topic_page(html) {
             fs.mkdirSync(topicDirectory, { recursive: true });
         }
 
-        let fullLink = 'https://github.com' + topicLink;
+        let fullLink = homeURL + topicLink;
         request(fullLink, function (err, response, html) {
             if (err) {
                 console.log(err);
@@ -49,7 +50,7 @@ function process_repo_links(html, topicDirectory) {
     // use only 8 of them to fetch the issues
     for (let i = 0; i < 8; i++) {
         let repoLink = $(repoAnchors[i]).attr('href');
-        let fullRepoLink = 'https://github.com' + repoLink;
+        let fullRepoLink = homeURL + repoLink;
         request(fullRepoLink, function (err, response, html) {
             if (err) {
                 console.log(err);
@@ -62,8 +63,11 @@ function process_repo_links(html, topicDirectory) {
 
 function process_repo_page(html, topicDirectory) {
     let $ = cheerio.load(html);
+
+    // get the link for issue page
     let issuePageLink = $('#issues-tab').attr('href');
-    let fullIssuePageLink = 'https://github.com' + issuePageLink;
+    let fullIssuePageLink = homeURL + issuePageLink;
+
     request(fullIssuePageLink, function (err, response, html) {
         if (err) {
             console.log(err);
@@ -75,10 +79,19 @@ function process_repo_page(html, topicDirectory) {
 
 function extract_issue_links(html, topicDirectory) {
     let $ = cheerio.load(html);
+    
+    // get all the relative URLs for issues
     let issueAnchors = $('div[aria-label="Issues"] a.Link--primary');
+
+    // save all issues to an array
     let issueLinksArr = [];
     for (let i = 0; i < issueAnchors.length; i++) {
         let issueLink = $(issueAnchors[i]).attr('href');
-        issueLinksArr.push(issueLink);
+        issueLinksArr.push(homeURL + issueLink);
     }
+
+    // write to a repo named json file
+    let repoName = $('strong > a').text();
+    let fileLoc = path.join(topicDirectory, repoName + '.json');
+    fs.writeFileSync(fileLoc, JSON.stringify(issueLinksArr));
 }
