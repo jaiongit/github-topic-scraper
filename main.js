@@ -25,7 +25,7 @@ function process_topic_page(html) {
     for (let i = 0; i < topicAnchors.length; i++) {
         let topicLink = $(topicAnchors[i]).attr('href');
 
-        let topicName = topicLink.split('/').slice(-1)[0];
+        let topicName = topicLink.split('/').pop();
         let topicDirectory = path.join(__dirname, 'topics', topicName);
         if (fs.existsSync(topicDirectory) == false) {
             fs.mkdirSync(topicDirectory, { recursive: true });

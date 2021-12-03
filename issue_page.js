@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const homeURL = 'https://github.com';
 
-function extract_issue_links(html, topicDirectory) {
+function extract_issue_links(html, topicDirectory, repoName) {
     let $ = cheerio.load(html);
 
     // get all the relative URLs for issues
@@ -17,7 +17,6 @@ function extract_issue_links(html, topicDirectory) {
     }
 
     // write to a repo named json file
-    let repoName = $('strong > a').text();
     let fileLoc = path.join(topicDirectory, repoName + '.json');
     fs.writeFileSync(fileLoc, JSON.stringify(issueLinksArr));
 }
