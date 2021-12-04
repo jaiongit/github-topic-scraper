@@ -17,6 +17,8 @@ function process_repo_links(html, topicDirectory) {
         request(fullIssueLink, function (err, response, html) {
             if (err) {
                 console.log(err);
+            } else if (response.statusCode == 404) {
+                console.log(`Issue page (${fullIssueLink}) not found`);
             } else {
                 extract_issue_links(html, topicDirectory, repoName);
             }

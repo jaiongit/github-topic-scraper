@@ -10,6 +10,8 @@ const homeURL = 'https://github.com';
 request(url, function (err, response, html) {
     if (err) {
         console.log(err);
+    } else if (response.statusCode == 404) {
+        console.log(`Page (${url}) not found`);
     } else {
         process_topic_page(html);
     }
@@ -35,6 +37,8 @@ function process_topic_page(html) {
         request(fullLink, function (err, response, html) {
             if (err) {
                 console.log(err);
+            } else if (response.statusCode == 404) {
+                console.log(`Topic page (${fullLink}) not found`);
             } else {
                 process_repo_links(html, topicDirectory);
             }
