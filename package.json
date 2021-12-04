@@ -1,0 +1,25 @@
+{
+  "name": "github-topic-scraper",
+  "description": "This is a Web Scaper that stores the urls of issues of top 8 repositories on a certain GitHub topic. This is done for 3 random topics given [here](https://github.com/topics/).",
+  "version": "1.0.0",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaiongit/github-topic-scraper.git"
+  },
+  "author": "Jai Juneja",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaiongit/github-topic-scraper/issues"
+  },
+  "homepage": "https://github.com/jaiongit/github-topic-scraper#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "pdfkit": "^0.13.0",
+    "request": "^2.88.2"
+  }
+}
